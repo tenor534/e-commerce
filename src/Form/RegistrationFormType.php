@@ -20,10 +20,16 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email'       , EmailType::class, [
+                'required' => true,
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'aria-describedby'  =>  'emailHelp'                    
                 ],
-                'label' => 'E-mail'
+                'label' => 'E-mail',
+                'label_attr' => [
+                    'class' => 'form-label', 
+                    'for'=>"email"
+                ],
             ])
             ->add('lastname'    , TextType::class, [
                 'attr' => [
@@ -35,7 +41,7 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('adress'      , TextType::class, [
+            ->add('address'      , TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ]
@@ -52,13 +58,16 @@ class RegistrationFormType extends AbstractType
             ])
          
             ->add('RGPDConsent', CheckboxType::class, [
-                                'mapped' => false,
+                'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
                     ]),
                 ],                
-                'label' => 'J\'accepte les termes et conditions RGPD'
+                'label' => 'J\'accepte les termes et conditions RGPD',
+                'attr' => [
+                    'class' => 'form-check-input'
+                ]
             ])
             ->add('plainPassword', PasswordType::class, [
                                 // instead of being set onto the object directly,
