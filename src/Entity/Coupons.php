@@ -35,7 +35,7 @@ class Coupons
     #[ORM\Column]
     private ?bool $is_valid = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options:['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'coupons')]
