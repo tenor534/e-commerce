@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\CouponsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +13,8 @@ use Symfony\Component\Validator\Constraints\Unique;
 #[ORM\Entity(repositoryClass: CouponsRepository::class)]
 class Coupons
 {
+    use CreatedAtTrait;
+     
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,14 +32,11 @@ class Coupons
     #[ORM\Column]
     private ?int $max_usage = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options:['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $validity = null;
 
     #[ORM\Column]
     private ?bool $is_valid = null;
-
-    #[ORM\Column(options:['default' => 'CURRENT_TIMESTAMP'])]
-    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'coupons')]
     #[ORM\JoinColumn(nullable: false)]
@@ -50,8 +50,9 @@ class Coupons
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->users        = new ArrayCollection();
+        $this->orders       = new ArrayCollection();
+        $this->created_at   = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -127,18 +128,6 @@ class Coupons
     public function setIsValid(bool $is_valid): static
     {
         $this->is_valid = $is_valid;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
 
         return $this;
     }
