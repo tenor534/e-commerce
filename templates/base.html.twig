@@ -20,10 +20,28 @@
         {% endblock %}
     </head>
     <body>
-        {# Navigateur #}
-        {% include "_partials/_nav.html.twig" %}
-        {% block body %}{% endblock %}
-        {# Footer #}
-        {% include "_partials/_footer.html.twig" %}
+        <div class="container-xxl bd-gutter mt-3 my-md-4 bd-layout">
+            <main class="bd-content ps-lg-2">
+        
+            {# Navigateur #}
+            {% include "_partials/_nav.html.twig" %}
+            {% if app.user and app.user.isVerified == false %}
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert-message">
+                        <strong>Votre compte n'est pas activé</strong>, renvoyez le lient d'activation
+                    </div>            
+                </div>
+                
+            {% endif %}
+
+            {% include '_partials/_flash.html.twig' %}
+
+            {% block body %}{% endblock %}
+            {# Footer #}
+            {% include "_partials/_footer.html.twig" %}
+
+            </main>
+        </div>
     </body>
 </html>

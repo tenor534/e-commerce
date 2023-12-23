@@ -7,6 +7,7 @@ use App\Repository\CategoriesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Type\Integer;
 
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
@@ -20,6 +21,9 @@ class Categories
 
     #[ORM\Column(length: 100)]
     private ?string $name = null;
+
+    #[ORM\Column]
+    private ?int $categoryOrder = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'categories')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
@@ -53,6 +57,19 @@ class Categories
 
         return $this;
     }
+
+    public function getCategoryOrder(): ?Integer
+    {
+        return $this->categoryOrder;
+    }
+
+    public function setCatgoryOrder(int $categoryOrder): self
+    {
+        $this->categoryOrder = $categoryOrder;
+
+        return $this;
+    }
+
 
     public function getParent(): ?self
     {

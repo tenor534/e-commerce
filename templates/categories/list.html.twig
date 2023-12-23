@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des produits de la catégorie {{category.name}}{% endblock %}
+
+{% block body %}
+
+    <main class="container">
+    <section class="row">
+        <div class="col-12">        
+        <h1>Site <e-commerce>e-commerce</e-commerce></h1>
+        <p>Bienvenue dans notre boutique en ligne</p>        
+        </div>
+
+        <div class="row">           
+     
+            <h2 class="mt-3">Liste des produits de la catégorie {{category.name}}</h2>
+            
+            {% for product in products %}            
+            <div class="col-4 mb-3 mt-3">
+                <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{product.name}}</h5>
+                    <p class="card-text">{{product.description}}</p>
+                    <a href="{{path('app_products_details', {id: product.id})}}" class="btn btn-primary">Show details</a>
+
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+    
+        </div>
+
+        <div class="col-12">
+            {#{dump(category) }#}
+        </div>
+
+    </section>
+</main>
+
+
+
+{% endblock %}

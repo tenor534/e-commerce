@@ -3,6 +3,40 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-<h1>Site e-commerce</h1>
-<p>Bienvenue dans notre boutique</p>
+
+<main class="container">
+    <section class="row">
+        <div class="col-12">        
+        <h1>Site <e-commerce>e-commerce</e-commerce></h1>
+        <p>Bienvenue dans notre boutique en ligne</p>        
+        </div>
+
+        <div class="row">
+        {% for category in categories %}
+            {% if category.parent ==  null %}
+                <h2 class="mt-3">{{category.name}}</h2>
+            {% else %}
+                
+                <div class="col-4 mb-3 mt-3">
+                    <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{category.name}}</h5>
+                        <p class="card-text">{{category.slug}}</p>
+                        <a href="{{path('app_products_list', {slug: category.slug})}}" class="btn btn-primary">Show products</a>
+                    </div>
+                    </div>
+                </div>
+
+            {% endif %}            
+        {% endfor %}
+        </div>
+
+        <div class="col-12">
+            {#{dump(categories) }#}
+        </div>
+
+    </section>
+</main>
+
+
 {% endblock %}
