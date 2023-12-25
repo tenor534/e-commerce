@@ -1,47 +1,75 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        {# Annonce au navigateur que le site est responsive et comment il doit se comporter#}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        
-        {# Feuilles de styles #}
-        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-        {% block stylesheets %}{% endblock %}
-        <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">           
+<html lang="en">
+<head>
+    {# Annonce au navigateur que le site est responsive et comment il doit se comporter#}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="https://themes.getbootstrap.com/wp-content/themes/bootstrap-marketplace/assets/images/fav/favicon.ico">
+                       
+    <!--Fichier CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">    
+    <link rel="stylesheet" href="{{ asset('assets/css/docs.css') }}">
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}"> 
+    
+    <!-- Fichiers JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>        
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {% block javascripts %}{% endblock %}
+    <script src="{{ asset('assets/js/scripts.js') }}" defer></script>
 
-        {# Fichiers JS #}
-        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer></script>
-        {% block javascripts %}
-        <script src="{{ asset('assets/js/scripts.js') }}" defer></script>
-
-        {% endblock %}
-    </head>
-    <body>
-        <div class="container-xxl bd-gutter mt-3 my-md-4 bd-layout">
-            <main class="bd-content ps-lg-2">
-        
-            {# Navigateur #}
-            {% include "_partials/_nav.html.twig" %}
-            {% if app.user and app.user.isVerified == false %}
+    <title>{% block title %}Boutique - Home{% endblock %}</title>
+</head>
+<body class="">    
+    {# nav top #}
+    {% include '_partials/_navTop.html.twig' %}
+    <header>
+        <section class="section">
+            <div class="container">
+                <!-- navbar-->
+                {% include "_partials/_navbar.html.twig" %}
+                <!--breadrumb-->
+                {% include "_partials/_breadcrumb.html.twig" %}
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                {% if app.user and app.user.isVerified == false %}
+                
                 <div class="alert alert-warning alert-dismissible" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     <div class="alert-message">
-                        <strong>Votre compte n'est pas activé</strong>, renvoyez le lient d'activation
+                        <strong>Votre compte n'est pas activé</strong>, renvoyez le lien d'activation
                     </div>            
+                </div>            
+                {% endif %}
+                            
+                {% include '_partials/_flash.html.twig' %}            
+            </div>
+        </section>    
+    </header>
+    
+    <!-- #main .site-main -->
+    <main id="main" class="site-main main">
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <!-- begin .col -->
+                    <div class="col">
+                        <div id="primary" class="content-area">
+                            <main id="main" class="site-main" role="main">
+                                {% block body %}{% endblock %}           
+                            </main>
+                        </div>
+                    </div>
+                    <!-- end .col -->
                 </div>
-                
-            {% endif %}
-
-            {% include '_partials/_flash.html.twig' %}
-
-            {% block body %}{% endblock %}
-            {# Footer #}
-            {% include "_partials/_footer.html.twig" %}
-
-            </main>
-        </div>
-    </body>
+            </div>
+        </section>
+    </main>
+    <!-- #main .site-main -->
+    {# Footer #}
+    {% include "_partials/_footer.html.twig" %}
+</body>
 </html>

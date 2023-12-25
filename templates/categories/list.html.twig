@@ -1,42 +1,88 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des produits de la catégorie {{category.name}}{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 
-    <main class="container">
-    <section class="row">
-        <div class="col-12">        
-        <h1>Site <e-commerce>e-commerce</e-commerce></h1>
-        <p>Bienvenue dans notre boutique en ligne</p>        
-        </div>
+<div class="archive-title clearfix">
+    <div class="row align-items-end">
 
-        <div class="row">           
-     
-            <h2 class="mt-3">Liste des produits de la catégorie {{category.name}}</h2>
+        <div class="col-md-8">
+            <h2 class="page-title mb-2 mb-md-0">Products list of categorie {{category.name}}</h2>
+            {#<span class="fs-13 text-gray-soft">Category</span>#}            
+        </div>
+        
+        <!--div class="col-md-4">
             
-            {% for product in products %}            
-            <div class="col-4 mb-3 mt-3">
-                <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">{{product.name}}</h5>
-                    <p class="card-text">{{product.description}}</p>
-                    <a href="{{path('app_products_details', {id: product.id})}}" class="btn btn-primary">Show details</a>
+            <form action="#" method="GET">
+                <div class="d-flex justify-content-md-end">
+                    <select name="orderby" class="form-control text-gray-soft" id="inlineFormCustomSelect">
+                        <option value="popularity">Sort by popularity</option>
+                        <option value="rating">Sort by average rating</option>
+                        <option value="date">Sort by newness</option>
+                        <option value="price">Sort by price: low to high</option>
+                        <option value="price-desc">Sort by price: high to low</option>
+                    </select>
+                </div>
+            </form>
+            <script>
+                jQuery(document).ready(function () {
+                    jQuery("#inlineFormCustomSelect").change(function () {
+                        jQuery(this).closest("form").submit();
+                    });
+                });
+            
+            </script>
+        </div-->
+    </div>
 
-                </div>
-                </div>
+</div>
+
+<div class="bd-callout bd-callout-info">
+    <code><strong>Quel sont les type de e-commerce ?</strong></code>
+    Il existe trois principales formes de e-commerce, qui se distinguent par leur clientèle et leur source de revenus: le "Business to Consumer", le "Business to Business" et le "Consumer to Consumer".
+</div>
+
+ <div>
+    <!-- Content here-->
+    <section>
+        <div class="bd-exemple-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">           
+                            
+                <div class="row">                                               
+                    {% for product in products %}            
+                    <div class="col-4 mb-3 mt-3">
+                        <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{product.name}}</h5>
+                            <p class="card-text">{{product.description}}</p>
+                            <a href="{{path('app_products_details', {id: product.id})}}" class="btn btn-primary">Show details</a>
+
+                        </div>
+                        </div>
+                    </div>
+                    {% endfor %}            
+                </div>   
+
             </div>
-            {% endfor %}
-    
         </div>
-
-        <div class="col-12">
-            {#{dump(category) }#}
-        </div>
-
     </section>
-</main>
 
+</div>   
 
+<!--Pagination-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+        </li>
+        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+</nav>
 
 {% endblock %}

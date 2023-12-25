@@ -14,7 +14,10 @@ class ProductsController extends AbstractController
     public function details(Products  $product): Response
     {
         //dd($product->getDescription());
-        return $this->render('products/details.html.twig', compact('product'));
+        return $this->render('products/details.html.twig', [
+            'product' => $product,             
+            'pageName' => 'Details' 
+        ]);
     }
     
     #[Route('/delete/{id}', name: 'delete')]

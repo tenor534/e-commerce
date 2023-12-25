@@ -1,16 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Details for the product : {{product.name}}{% endblock %}
+{% block title %}Detail of the produict {{ product.name }}{% endblock %}
 
 {% block body %}
 
-    <h2 id="dark-variant">
-        Details for the product : {{product.name}} 
-        <a class="anchor-link" href="#dark-variant" aria-label="Link to this section: Dark variant"></a>
-    </h2>
-   
-    <div class="bd-example-snippet bd-code-snippet">
-        <div class="bd-example m-0 border-0">
+<div class="archive-title clearfix">
+    <div class="row align-items-end">
+
+        <div class="col-md-8">
+            <h2 class="page-title mb-2 mb-md-0">Detail for product {{product.name}}</h2>
+            {#<span class="fs-13 text-gray-soft">Category</span>#}            
+        </div>             
+    </div>
+</div>
+
+
+
+<div class="bd-callout bd-callout-info">
+    <code><strong>Quel sont les type de e-commerce ?</strong></code>
+    Il existe trois principales formes de e-commerce, qui se distinguent par leur clientèle et leur source de revenus: le "Business to Consumer", le "Business to Business" et le "Consumer to Consumer".
+</div>
+
+ <div>
+    <!-- Content here-->
+    <section>
+        <div class="bd-exemple-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">           
 
 
             <section class="row">
@@ -32,7 +47,7 @@
                             {% for image in product.images %}
                 
                             <div class="carousel-item {{ (loop.first)? 'active' : ''}}">
-                                <img src="{{ asset('assets/uploads/') ~ image.name }}" class="d-block w-100" alt="{{ image.name }}">
+                                <img src="{{ asset('assets/uploads/') ~ image.name }}" class="d-block w-100" width="150" height="auto" alt="{{ image.name }}">
                             </div>
                 
                             {% endfor %}
@@ -70,9 +85,10 @@
                 </div>
             </section>
             
-            
         </div>
-    </div>    
+    </div>
+</section>
 
+</div>   
 
 {% endblock %}

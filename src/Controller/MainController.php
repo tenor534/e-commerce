@@ -17,7 +17,8 @@ class MainController extends AbstractController
             'categories' => $categoriesRepository->findBy(
                 [],
                 ['categoryOrder' => 'ASC'] 
-            )
+            ),
+            'pageName' => 'Categories' 
         ]);
     }
 }

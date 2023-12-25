@@ -24,7 +24,8 @@ class CategoriesController extends AbstractController
         return $this->render(
             'categories/list.html.twig', [
             'category' => $category,
-            'products' => $products            
+            'products' => $products,            
+            'pageName' => 'Products list'             
         ]);
     }
 }
