@@ -50,7 +50,7 @@
             <div class="bd-example m-0 border-0">           
                             
                 <div class="row">                                               
-                    {% for product in products %}            
+                    {% for product in products.datas %}            
                     <div class="col-4 mb-3 mt-3">
                         <div class="card h-100">
                         <div class="card-body">
@@ -67,22 +67,16 @@
             </div>
         </div>
     </section>
-
 </div>   
 
-<!--Pagination-->
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link">Previous</a>
-        </li>
-        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
-    </ul>
-</nav>
+{# Liste des variables #}
+{% set path = 'app_products_list' %}
+{% set slug =  category.slug %}
+{% set pages = products.pages %}
+{% set currentPage = products.page %}
+
+{% if pages > 1 %}   
+    {% include "_partials/_pagination.html.twig" %}
+{% endif %}
 
 {% endblock %}
