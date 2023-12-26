@@ -16,6 +16,7 @@ class ProfileController extends AbstractController
     {
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'Profile de l\'utilisateur',
+            'pageName' => 'Profile'
         ]);
     }
 
@@ -24,6 +25,7 @@ class ProfileController extends AbstractController
     {
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'Commandes de l user',
+            'pageName' => 'Profile'
         ]);
     }
 }
