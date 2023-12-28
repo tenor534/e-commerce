@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product administration{% endblock %}
+
+{% block body %}
+
+<div class="archive-title clearfix">
+    <div class="row align-items-end">
+
+        <div class="col-md-8">
+            <h2 class="page-title mb-2 mb-md-0">Add product</h2>
+            {#<span class="fs-13 text-gray-soft">Category</span>#}            
+        </div>
+    </div>
+
+</div>
+
+<div class="bd-callout bd-callout-info">
+    Un <strong>formulaire d'ajout de produit</strong> est un court formulaire affiché sur une page web. Il répond à un objectif unique : s'inscrire à une newsletter, à un webinar, un événement… 
+</div>
+
+ <div>
+    <!-- Content here-->
+    <section>
+        <div class="bd-exemple-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">               
+
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+
+                <section>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 d-flex justify-content-center mt-0">
+                                <img src="https://themes.getbootstrap.com/wp-content/themes/bootstrap-marketplace/assets/images/elements/bootstrap-stack.png" alt="logo" class="rounded mx-auto d-block" width="107" height="99">
+                            </div>
+                            <div class="col-12 d-flex justify-content-center mt-5">
+                                <div class="card border-0 shadow p-3 mb-5 bg-body-tertiary rounded" style="width: 40rem;">
+                                    <div class="card-header bg-body-tertiary border-0 text-center">
+                                        <h1>Edit product : {{ product.name }}</h1>
+                                    </div>
+                                    <div class="card-body">
+                                       {# Include avec modification du label du bouton en : Update #}     
+                                       {% include "admin/products/_form.html.twig" with {'button_label' : 'Update'} %}        
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </section>
+</div>   
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/images.js') }}" defer></script>
+{% endblock %}

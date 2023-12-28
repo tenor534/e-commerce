@@ -69,6 +69,6 @@ class ProductsVoter extends Voter
     }
 
     private function canDelete(){
-        return $this->security->isGranted('ROLE_ADMIN');
+        return $this->security->isGranted('ROLE_PRODUCT_ADMIN');
     }
 }

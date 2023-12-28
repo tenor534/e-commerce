@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     ITEM_PER_PAGE: '%env(ITEM_PER_PAGE)%'
+    brochures_directory: '%kernel.project_dir%/public/assets/uploads/products/brochures'
+    images_directory: '%kernel.project_dir%/public/assets/uploads/products/images'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -22,3 +24,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\FileUploaderService:
+        arguments:
+            $targetDirectory: '%brochures_directory%'

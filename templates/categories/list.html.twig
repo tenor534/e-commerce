@@ -53,6 +53,15 @@
                     {% for product in products.datas %}            
                     <div class="col-4 mb-3 mt-3">
                         <div class="card h-100">
+                            
+                            {% if product.images[0] != null %}                                                            
+                            <img 
+                                src="{{ asset('assets/uploads/products/images/mini/300x300-' ~ product.images[0].name) }}" 
+                                alt="{{ product.name }}"
+                                class="card-img-top"
+                            >
+                            {% endif %}
+
                         <div class="card-body">
                             <h5 class="card-title">{{product.name}}</h5>
                             <p class="card-text">{{product.description}}</p>

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
 class Products
@@ -22,6 +23,13 @@ class Products
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Product name musnt be null')] //Champ obligatoire
+    #[Assert\Length(
+        min: 5,
+        max: 30,
+        minMessage: 'It must be at least 5 caracters',
+        maxMessage: 'Title not + 30 car'
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -31,12 +39,17 @@ class Products
     private ?int $price = null;
 
     #[ORM\Column]
+    #[Assert\PositiveOrZero(message: 'Le stock doit être >= 0')]
     private ?int $stock = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $brochureFilename = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Categories $categories = null;
 
-    #[ORM\OneToMany(mappedBy: 'products', targetEntity: Images::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'products', targetEntity: Images::class, orphanRemoval: true, cascade:['persist'])]
     private Collection $images;
 
     #[ORM\OneToMany(mappedBy: 'products', targetEntity: OrdersDetails::class)]
@@ -102,6 +115,18 @@ class Products
         return $this;
     }
 
+    public function getBrochureFilename(): string
+    {
+        return $this->brochureFilename;
+    }
+
+    public function setBrochureFilename(string $brochureFilename): self
+    {
+        $this->brochureFilename = $brochureFilename;
+
+        return $this;
+    }
+
     public function getCategories(): ?Categories
     {
         return $this->categories;
@@ -126,6 +151,7 @@ class Products
     {
         if (!$this->images->contains($image)) {
             $this->images->add($image);
+            //$this->images[] = $image; : equivalent
             $image->setProducts($this);
         }
 
