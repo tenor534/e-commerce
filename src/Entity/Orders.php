@@ -22,11 +22,15 @@ class Orders
     private ?string $reference = null;
     
     #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Coupons $coupons = null;
 
-    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OrdersDetails::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OrdersDetails::class, orphanRemoval: true, cascade: ['persist'])]    
     private Collection $ordersDetails;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?users $users = null;
 
     public function __construct()
     {
@@ -89,6 +93,18 @@ class Orders
                 $ordersDetail->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUsers(): ?users
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?users $users): static
+    {
+        $this->users = $users;
 
         return $this;
     }

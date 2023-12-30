@@ -6,6 +6,7 @@ use App\Entity\Images;
 use App\Service\FileUploaderService;
 use App\Entity\Products;
 use App\Form\ProductsFormType;
+use App\Repository\ProductsRepository;
 use App\Service\PicturesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,9 +27,14 @@ class ProductsController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(ProductsRepository $productsRipository): Response
     {
+        $products = $productsRipository->findBy(
+            [], 
+            ['id' => 'asc']
+        );
         return $this->render('admin/products/index.html.twig',[
+            'products' => $products,
             'pageName' => 'Administration'
         ]);
     }
@@ -58,8 +64,8 @@ class ProductsController extends AbstractController
             $slug = $slugger->slug($product->getName())->lower();
             $product->setSlug($slug);
             
-            $price =$product->getPrice() * 100;
-            $product->setPrice($price);
+            //$price =$product->getPrice() * 100;
+            //$product->setPrice($price);
 
 
             /** @var UploadedFile $brochureFile */
@@ -120,7 +126,7 @@ class ProductsController extends AbstractController
         $this->denyAccessUnlessGranted('PRODUCT_EDIT', $product);
      
         //Modify the price
-        $product->setPrice($product->getPrice() / 100);
+        //$product->setPrice($product->getPrice() / 100);
        
         /*if($product->getBrochureFilename()){
             $product->setBrochureFilename(
@@ -137,7 +143,7 @@ class ProductsController extends AbstractController
            // Generation du slug
            $product->setSlug($slugger->slug($product->getName())->lower());           
            // Price           
-           $product->setPrice($product->getPrice() * 100);
+           //$product->setPrice($product->getPrice() * 100);
 
            /** @var UploadedFile $brochureFile */
            $brochureFile = $form->get('brochure')->getData();

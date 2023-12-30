@@ -76,7 +76,7 @@
                         Price : {{ (product.price / 100) |format_currency('EUR', locale='de') }} 
                     </p>
                     {% if product.stock > 0 %}
-                        <a href="" class="btn btn-success">Add to card</a>
+                        <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-success">Add to card</a>
                     {% else %}
                         <p>Temporairemet en rupture de stock</p>
                         

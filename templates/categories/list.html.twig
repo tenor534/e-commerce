@@ -50,27 +50,39 @@
             <div class="bd-example m-0 border-0">           
                             
                 <div class="row">                                               
-                    {% for product in products.datas %}            
-                    <div class="col-4 mb-3 mt-3">
-                        <div class="card h-100">
-                            
-                            {% if product.images[0] != null %}                                                            
-                            <img 
-                                src="{{ asset('assets/uploads/products/images/mini/300x300-' ~ product.images[0].name) }}" 
-                                alt="{{ product.name }}"
-                                class="card-img-top"
-                            >
-                            {% endif %}
+                    {% if products.datas is defined  %}
+                        {% for product in products.datas %}            
+                        <div class="col-4 mb-3 mt-3">
+                            <div class="card h-100">
+                                
+                                {% if product.images[0] != null %}                                                            
+                                <img 
+                                    src="{{ asset('assets/uploads/products/images/mini/300x300-' ~ product.images[0].name) }}" 
+                                    alt="{{ product.name }}"
+                                    class="card-img-top"
+                                >
+                                {% endif %}
 
-                        <div class="card-body">
-                            <h5 class="card-title">{{product.name}}</h5>
-                            <p class="card-text">{{product.description}}</p>
-                            <a href="{{path('app_products_details', {id: product.id})}}" class="btn btn-primary">Show details</a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{product.name}}</h5>
+                                    <p class="card-text">{{product.description}}</p>
+                                    <a href="{{path('app_products_details', {id: product.id})}}" class="btn btn-primary">Show details</a>
 
+                                </div>
+                            </div>
                         </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-4 mb-3 mt-3">
+                            <div class="card h-100">                                
+                                <div class="card-body">
+                                    <h5 class="card-title">Aucun produit pour cette catégorie</h5>  
+                                    <a href="{{path('app_main')}}" class="btn btn-primary justify-content-md-end">Categories list</a>                                  
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    {% endfor %}            
+
+                    {% endif %}     
                 </div>   
 
             </div>
@@ -79,13 +91,15 @@
 </div>   
 
 {# Liste des variables #}
-{% set path = 'app_products_list' %}
-{% set slug =  category.slug %}
-{% set pages = products.pages %}
-{% set currentPage = products.page %}
+{% if products.datas is defined  %}
+    {% set path = 'app_products_list' %}
+    {% set slug =  category.slug %}
+    {% set pages = products.pages %}
+    {% set currentPage = products.page %}
 
-{% if pages > 1 %}   
-    {% include "_partials/_pagination.html.twig" %}
+    {% if pages > 1 %}   
+        {% include "_partials/_pagination.html.twig" %}
+    {% endif %}
 {% endif %}
 
 {% endblock %}

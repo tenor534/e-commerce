@@ -31,7 +31,7 @@ class UsersFixtures extends Fixture
             $this->passwordEncoder->hashPassword($admin, 'admin')
         );
         $admin->setRoles(['ROLE_ADMIN']);
-        $manager->persist($admin);
+        //$manager->persist($admin); 
 
         //facker
 
@@ -51,9 +51,9 @@ class UsersFixtures extends Fixture
             );
             $user->setRoles(['ROLE_USER']);
 
-            $manager->persist($user);              
+            //$manager->persist($user);              
         }
 
-        $manager->flush();
+        //$manager->flush();
     }
 }

@@ -52,13 +52,13 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $is_verified = false;
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Orders::class)]
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Orders::class, orphanRemoval: true)]
     private Collection $orders;
 
     public function __construct()
     {
-        $this->orders       = new ArrayCollection();
         $this->created_at   = new \DateTimeImmutable();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,8 +203,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
     /**
      * @return Collection<int, Orders>
      */
@@ -234,4 +232,5 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }

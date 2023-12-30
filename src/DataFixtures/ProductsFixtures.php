@@ -32,10 +32,10 @@ class ProductsFixtures extends Fixture
             
             $this->setReference('prod-'.$prod, $product);
 
-            $manager->persist($product);
+            //$manager->persist($product);
            
         }
 
-        $manager->flush();
+        //$manager->flush();
     }
 }

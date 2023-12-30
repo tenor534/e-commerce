@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration - Categories List{% endblock %}
+{% block body %}
+
+<div class="archive-title clearfix">
+    <div class="row align-items-end">
+
+        <div class="col-md-8">
+            <h2 class="page-title mb-2 mb-md-0">Administration - Categories List</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="bd-callout bd-callout-info">    
+    
+</div>
+
+ <div>
+    <!-- Content here-->
+    <section>
+        <div class="bd-exemple-snippet bd-code-snippet">
+            <div class="bd-example m-0 p-0 border-0">           
+
+                <div class="container">
+                    <div class="row">
+                        {% include "_partials/_adminnav.html.twig" %}
+                        <main class="col-9 border-light bg-white p-0 m-0">                            
+                            
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Parent</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Slug</th>
+                                        <th scope="col">Order</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for category in categories %}
+                                    <tr>
+                                        <th scope="row">{{ category.id }}</th>
+                                        <td>
+                                            {% if category.parent is not null %}
+                                                {{ category.parent.name }}    
+                                            {% endif %}                                            
+                                        </td>
+                                        <td>                                            
+                                        {{ (category.parent is null) ? "<code><b>#{category.name}</b></code>"|raw : category.name}}
+                                        </td>
+                                        <td>{{ category.slug }}</td>
+                                        <td class="text-center">{{ category.categoryOrder }}</td>
+                                    </tr>                                        
+                                    {% endfor %}
+                            
+                                </tbody>
+                            </table>
+
+                        </main>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>   
+
+    
+{% endblock %}

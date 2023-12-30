@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration{% endblock %}
+{% block body %}
+
+<div class="archive-title clearfix">
+    <div class="row align-items-end">
+
+        <div class="col-md-8">
+            <h2 class="page-title mb-2 mb-md-0">Administration</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="bd-callout bd-callout-info">    
+    
+</div>
+
+ <div>
+    <!-- Content here-->
+    <section>
+        <div class="bd-exemple-snippet bd-code-snippet">
+            <div class="bd-example m-0 p-0 border-0">           
+
+                <div class="container">
+                    <div class="row">
+
+                        <main class="col-9 border-light bg-white p-0 m-0">                            
+                            {% include "_partials/_adminnav.html.twig" %}
+                        </main>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>   
+
+    
+{% endblock %}

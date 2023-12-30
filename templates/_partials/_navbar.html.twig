@@ -40,6 +40,12 @@
 
             <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                 {% if app.user %}
+                    {# Si l'utilisateur as un role ROLE_PRODUCT_ADMIN, on affiche le menu Admin#}
+                    {% if is_granted('ROLE_PRODUCT_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin_index') }}">Admin</a>
+                        </li>                        
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="#">Mon compte</a>
                     </li>

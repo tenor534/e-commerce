@@ -95,7 +95,7 @@ class Categories
         return $this->categoryOrder;
     }
 
-    public function setCatgoryOrder(int $categoryOrder): self
+    public function setCategoryOrder(int $categoryOrder): self
     {
         $this->categoryOrder = $categoryOrder;
 

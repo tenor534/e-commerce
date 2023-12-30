@@ -27,4 +27,4 @@ services:
 
     App\Service\FileUploaderService:
         arguments:
-            $targetDirectory: '%brochures_directory%'
+            $targetDirectory: '%brochures_directory%' 
