@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My account{% endblock %}
+{% block body %}
+
+<div class="archive-title clearfix">
+    <div class="row align-items-end">
+
+        <div class="col-md-8">
+            <h2 class="page-title mb-2 mb-md-0">My account</h2>
+            {#<span class="fs-13 text-gray-soft">Category</span>#}            
+        </div>
+    </div>
+
+</div>
+
+<div class="bd-callout bd-callout-info">
+    Un <strong>formulaire mon compte</strong> est un court formulaire affiché sur une page web. Il répond à un objectif unique : s'inscrire à une newsletter, à un webinar, un événement… 
+</div>
+
+ <div>
+    <!-- Content here-->
+    <section>
+        <div class="bd-exemple-snippet bd-code-snippet">
+            <div class="bd-example m-0 p-0 border-0">                
+
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+
+                <section>
+                    <div class="container">
+                        <div class="row">
+                            {% include "_partials/_usernav.html.twig" %}                            
+                            <main class="col-9 border-light bg-white p-0 m-0">   
+                            
+                                <div class="">
+                                    <div class="card border-0 p-0 bg-body-tertiary">
+                                        
+                                        <div class="card-body p-2">
+                                        {# Include avec modification du label du bouton en : Update #}     
+                                        {% set button_label = (app.request.attributes.get('_route') == 'admin_users_edit')? 'Valider' : 'Editer' %}                                        
+                                        {% include "users/_form.html.twig" with {'button_label' : button_label } %}                                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </section>
+</div>   
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/images.js') }}" defer></script>
+{% endblock %}

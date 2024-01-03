@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\UsersRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -232,5 +233,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    
+    public function getCreatedAt(): ?DateTimeImmutable
+    {
+        return $this->created_at;        
+    }   
+   
 
 }
