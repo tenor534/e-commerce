@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Positive;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class ProductsFormType extends AbstractType
 {
@@ -27,27 +28,40 @@ class ProductsFormType extends AbstractType
         $builder
             
             ->add('name'    , TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
+                'label'     => 'Name : ',
+                'required'  => true,
+                'attr'      => [
+                        'class' => 'form-control'
                 ]
             ])                     
             ->add('description'    , TextareaType::class, [
-                'attr' => [
-                    'class' => 'form-control'
+                'label'     => 'Description : ',
+                'required'  => true,
+                'attr'      => [
+                        'class' => 'form-control'
                 ]
             ])
             ->add('price'    , MoneyType::class, [
-                'attr' => [
+                'scale' => 2,
+                'attr'  => [
+                    //'type' => 'number',
+                    'placeholder' => 'x.xx',
                     'class' => 'form-control'
-                ],
+                  ],
+                'currency' => 'EUR',                
+                'label'     => 'Price : ',
+                'required'  => true,                
                 'divisor'=> 100,
                 'constraints' => [
                     new Positive(
                         message: 'Le prix ne peux être négatif'
-                    )
+                    ),
+                    //new Regex( array( 'pattern' => '/[0-9]{1,}\.[0-9]{2}/')),
                 ]
             ]) 
             ->add('stock'    , IntegerType::class, [
+                'label'     => 'Stock : ',
+                'required'  => true,
                 'attr' => [
                     'class' => 'form-control'
                 ]
@@ -58,7 +72,7 @@ class ProductsFormType extends AbstractType
 
             // Brochure du produit
             ->add('brochure', FileType::class, [
-                'label' => 'Brochure (PDF file)',
+                'label' => 'Brochure (PDF file) : ',
 
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
@@ -83,10 +97,10 @@ class ProductsFormType extends AbstractType
 
             //All car images multiples    
             ->add('images', FileType::class, [
-                'label' => false,
-                'multiple' => true,
-                'mapped' =>false,
-                'required' => false,
+                'label'     => false,
+                'multiple'  => true,
+                'mapped'    => false,
+                'required'  => false,
                 'constraints' => [
                     new All(
                         new Image([
@@ -99,6 +113,8 @@ class ProductsFormType extends AbstractType
 
 
             ->add('categories', EntityType::class, [
+                'label'     => 'Categories : ',
+                'required'  => true,
                 'class' => Categories::class,
                 'choice_label' => 'name',
                 'attr' => [

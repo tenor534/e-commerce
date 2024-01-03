@@ -90,7 +90,7 @@ class Categories
     }
 
 
-    public function getCategoryOrder(): ?Integer
+    public function getCategoryOrder(): ?int
     {
         return $this->categoryOrder;
     }
