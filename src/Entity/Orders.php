@@ -32,10 +32,18 @@ class Orders
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $users = null;
 
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: Invoices::class)]
+    private Collection $invoices;
+
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: Refunds::class)]
+    private Collection $refunds;
+
     public function __construct()
     {
         $this->ordersDetails    = new ArrayCollection();
         $this->created_at       = new \DateTimeImmutable();
+        $this->invoices = new ArrayCollection();
+        $this->refunds = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,14 +105,74 @@ class Orders
         return $this;
     }
 
-    public function getUsers(): ?users
+    public function getUsers(): ?Users
     {
         return $this->users;
     }
 
-    public function setUsers(?users $users): static
+    public function setUsers(?Users $users): static
     {
         $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoices>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoices $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setOrders($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoices $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getOrders() === $this) {
+                $invoice->setOrders(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Refunds>
+     */
+    public function getRefunds(): Collection
+    {
+        return $this->refunds;
+    }
+
+    public function addRefund(Refunds $refund): static
+    {
+        if (!$this->refunds->contains($refund)) {
+            $this->refunds->add($refund);
+            $refund->setOrders($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRefund(Refunds $refund): static
+    {
+        if ($this->refunds->removeElement($refund)) {
+            // set the owning side to null (unless already changed)
+            if ($refund->getOrders() === $this) {
+                $refund->setOrders(null);
+            }
+        }
 
         return $this;
     }

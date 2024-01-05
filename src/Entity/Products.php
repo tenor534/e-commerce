@@ -55,11 +55,15 @@ class Products
     #[ORM\OneToMany(mappedBy: 'products', targetEntity: OrdersDetails::class)]
     private Collection $ordersDetails;
 
+    #[ORM\OneToMany(mappedBy: 'products', targetEntity: RefundsDetails::class)]
+    private Collection $refundsDetails;
+
     public function __construct()
     {
         $this->images           = new ArrayCollection();
         $this->ordersDetails    = new ArrayCollection();
         $this->created_at       = new \DateTimeImmutable();
+        $this->refundsDetails = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,6 +198,36 @@ class Products
             // set the owning side to null (unless already changed)
             if ($ordersDetail->getProducts() === $this) {
                 $ordersDetail->setProducts(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RefundsDetails>
+     */
+    public function getRefundsDetails(): Collection
+    {
+        return $this->refundsDetails;
+    }
+
+    public function addRefundsDetail(RefundsDetails $refundsDetail): static
+    {
+        if (!$this->refundsDetails->contains($refundsDetail)) {
+            $this->refundsDetails->add($refundsDetail);
+            $refundsDetail->setProducts($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRefundsDetail(RefundsDetails $refundsDetail): static
+    {
+        if ($this->refundsDetails->removeElement($refundsDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($refundsDetail->getProducts() === $this) {
+                $refundsDetail->setProducts(null);
             }
         }
 
