@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\RefundsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: RefundsRepository::class)]
 class Refunds
 {
+    use CreatedAtTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -19,10 +22,7 @@ class Refunds
     private ?int $refunds_type = null;
 
     #[ORM\Column(length: 150)]
-    private ?string $reference = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?string $reference = null;   
 
     #[ORM\ManyToOne(inversedBy: 'refunds')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,6 +34,7 @@ class Refunds
     public function __construct()
     {
         $this->refundsDetails = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -64,19 +65,7 @@ class Refunds
 
         return $this;
     }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
+   
     public function getOrders(): ?Orders
     {
         return $this->orders;

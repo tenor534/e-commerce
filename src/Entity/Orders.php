@@ -38,12 +38,16 @@ class Orders
     #[ORM\OneToMany(mappedBy: 'orders', targetEntity: Refunds::class)]
     private Collection $refunds;
 
+    #[ORM\Column]
+    private ?int $status = null;
+
     public function __construct()
     {
         $this->ordersDetails    = new ArrayCollection();
         $this->created_at       = new \DateTimeImmutable();
-        $this->invoices = new ArrayCollection();
-        $this->refunds = new ArrayCollection();
+        $this->invoices         = new ArrayCollection();
+        $this->refunds          = new ArrayCollection();
+        $this->status           = 0; //En cours (0) - Expédiées (1) - Retournées (2) - Annulées (3)
     }
 
     public function getId(): ?int
@@ -173,6 +177,18 @@ class Orders
                 $refund->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

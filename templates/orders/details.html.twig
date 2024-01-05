@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My account{% endblock %}
+{% block body %}
+
+<div class="archive-title clearfix">
+    <div class="row align-items-end">
+
+        <div class="col-md-8">
+            <h2 class="page-title mb-2 mb-md-0">Détail de ma commande</h2>
+            {#<span class="fs-13 text-gray-soft">Category</span>#}            
+        </div>
+    </div>
+
+</div>
+
+<div class="bd-callout bd-callout-tertiary">
+    {# 
+        'order'     => $order,
+        'details'   => $details, 
+        'amount'    => $amount,
+        'shipping'  => $shipping,
+        'total'     => $total,
+    #}
+    <div class="row">
+        <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header text-center">
+                    <strong>COMMANDE</strong>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">Référence : {{ order.reference }}</li>
+                <li class="list-group-item">Date : {{ order.createdAt|format_datetime('short', 'none', locale='fr') }}</li>
+                <li class="list-group-item">
+                    Statut :            
+                    {#  Statut de la commande #}        
+                    {% if order.status == 1 %}
+                        {% set statusStr = 'Expédiée' %}
+                        {% set color = 'success' %}            
+                    {% elseif order.status == 2 %}
+                        {% set statusStr = 'Retournée' %}      
+                        {% set color = 'tertiary' %}                              
+                    {% elseif order.status == 3 %}
+                        {% set statusStr = 'Annulée' %}   
+                        {% set color = 'warning' %}                                             
+                    {% else %}
+                        {% set statusStr = 'En cours' %}       
+                        {% set color = 'primary' %}            
+                    {% endif %}
+
+                    <small class="d-inline-flex px-2 fw-semibold text-{{ color }}-emphasis bg-{{ color }}-subtle border border-{{ color }}-subtle rounded-2">
+                        {{ statusStr }}
+                    </small>
+
+                </li>
+                <li class="list-group-item">N° suivi colis :</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header text-center">
+                    <strong>ADRESSE DE LIVRAISON</strong>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{ user.firstname }} {{ user.lastname }}</li>
+                <li class="list-group-item">{{ user.address }}</li>
+                <li class="list-group-item">{{ user.zipcode }}</li>
+                <li class="list-group-item">{{ user.city }}</li>                
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header text-center">
+                    <strong>TOTAL</strong>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">Montant : <span class="float-end">{{ (amount / 100) |format_currency('EUR', locale='de') }}</span></li>
+                <li class="list-group-item">Frais d'envoi : <span class="float-end">{{ (shipping / 100) |format_currency('EUR', locale='de') }}</span></li>
+                <li class="list-group-item"><strong>Sous-total : <span class="float-end">{{ (total / 100) |format_currency('EUR', locale='de') }}</span></strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+ <div>
+    <!-- Content here-->
+    <section>
+        <div class="bd-exemple-snippet bd-code-snippet">
+            <div class="bd-example m-0 p-0 border-0">                
+
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+
+                <section>
+                    <div class="container">
+                        <div class="row">
+                            {% include "_partials/_usernav.html.twig" %}                            
+                            <main class="col-9 border-light bg-white p-0 m-0">   
+                            
+                                <div class="">
+                                    <div class="card border-0 p-0 bg-body-tertiary">                                        
+                                        <div class="card-body p-2">
+                                         {# Liste des commandes #}       
+                                         {% include "orders/_details.html.twig" %}                                               
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </section>
+</div>   
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/images.js') }}" defer></script>
+{% endblock %}

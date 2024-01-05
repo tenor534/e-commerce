@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Orders;
 use App\Entity\OrdersDetails;
+use App\Repository\OrdersRepository;
 use App\Repository\ProductsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,5 +59,74 @@ class OrdersController extends AbstractController
 
         $this->addFlash('message', 'Commande créée avec succès');
         return $this->redirectToRoute('app_main');
+    }
+
+
+    #[Route('/show', name: 'show', methods: ['GET'])]
+    public function show(OrdersRepository $ordersRepository): Response
+    {
+        $orders = $ordersRepository->findBy(
+            [],
+            ['created_at' => 'asc']
+        );
+       
+        return $this->render('orders/show.html.twig', [
+            'orders'    => $orders,
+            'pageName'  => 'Mes commandes'
+        ]);
+    }
+
+    #[Route('/show/details/{id}', name: 'show_details', methods: ['GET'])]
+    public function showDetails(Orders $order): Response
+    {
+
+        //Détail de la commande
+        $details = $order->getOrdersDetails();        
+
+        /**
+         * 
+         * TOTAL  
+         * Montant du panier
+         * 108,99€
+         * Frais d'envoi
+         * 4,95€
+         * Sous-total 
+         * 113,94€
+        */
+        
+        $amount     = 0; // Total
+        $shipping   = 499; // val * 100
+
+        foreach($details as $detail){
+            $amount += ($detail->getPrice() * $detail->getQuantity());
+        }
+
+        $total = $amount + $shipping;
+        
+        return $this->render('orders/details.html.twig', [
+            'order'     => $order,
+            'details'   => $details, 
+            'amount'    => $amount,
+            'shipping'  => $shipping,
+            'total'     => $total,
+            'user'      => $this->getUser(),
+            'pageName'  => 'Détail de la commande'
+        ]);
+    }
+
+    #[Route('/cancel/{id}', name: 'cancel')]
+    public function cancel(Orders $order, EntityManagerInterface $entityManager)
+    {
+        //Etat de la commande : En cours (0) - Expédiées (1) - Retournées (2) - Annulées (3)
+        
+        $order->setStatus(3);
+        $entityManager->persist($order);
+        $entityManager->flush();
+        
+        //Affiche un message flash
+        $this->addFlash('success', 'Votre commande a été annulée ! Merci.');
+
+        //On redirige vers la page liste des commandes
+        return $this->redirectToRoute('app_orders_show');
     }
 }

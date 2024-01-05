@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\CreatedAtTrait;
 use App\Repository\InvoicesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InvoicesRepository::class)]
 class Invoices
 {
+    
+    use CreatedAtTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,16 +26,19 @@ class Invoices
     #[ORM\Column(length: 150)]
     private ?string $tracking_number = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $shipped_at = null;
+    private ?\DateTime $shipped_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Orders $orders = null;
 
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->shipped_at = new \DateTime();
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -72,19 +79,7 @@ class Invoices
 
         return $this;
     }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
+    
     public function getShippedAt(): ?\DateTimeImmutable
     {
         return $this->shipped_at;
