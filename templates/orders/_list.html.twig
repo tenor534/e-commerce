@@ -35,8 +35,8 @@
             {{ statusStr }}
           </small>
         </td>
-        <td><a href="#"></a>Télécharger la facture</a></td>
-        <td><a href="#"></a>Télécharger l'annulation</a></td>
+        <td><a href="{{ path('app_orders_generate_invoice', {id:order.invoices[0].id})}}">Télécharger la facture</a></td>
+        <td><a href="#">Télécharger l'annulation</a></td>
 
         {% set price = 0 %} {# Montant total TTC par commande #}
         {% for product in order.getOrdersDetails() %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Invoices;
 use App\Entity\Orders;
 use App\Entity\OrdersDetails;
 use App\Repository\OrdersRepository;
@@ -11,6 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Knp\Snappy\Pdf;
 
 #[Route('/orders', name: 'app_orders_')]
 class OrdersController extends AbstractController
@@ -53,6 +57,19 @@ class OrdersController extends AbstractController
 
         // On persiste et on flush
         $em->persist($order);
+        $em->flush();
+
+        //On crée une première facture
+        $invoice = new Invoices();
+
+        $invoice->setReference('FACT-'.uniqid());
+        $invoice->setShipping(499); // 4.99
+        //$invoice->setTrackingNumber('');
+        //$invoice->setShippedAt('');
+        $invoice->setOrders($order);        
+
+        // On persiste et on flush
+        $em->persist($invoice);
         $em->flush();
 
         $session->remove('cart');
@@ -129,4 +146,49 @@ class OrdersController extends AbstractController
         //On redirige vers la page liste des commandes
         return $this->redirectToRoute('app_orders_show');
     }
+
+    #[Route('/generate/invoice/{id}', name: 'generate_invoice', methods: ['GET'])]
+    public function generateInvoicePdf(Invoices $invoice, Pdf $knpSnappyPdf): PdfResponse
+    {
+        //Gégeration d'une facture PDF
+        //dd($invoice);
+        $options = [
+            'margin-top'    => 2,
+            'margin-bottom' => 2,
+            'margin-left'   => 2,
+            'margin-right'  => 3,
+        ];
+
+        //La commande
+        $order      = $invoice->getOrders();
+        $details    = $order->getOrdersDetails();
+
+        $amount     = 0; // Total
+        $shipping   = 499; // val * 100
+
+        foreach($details as $detail){
+            $amount += ($detail->getPrice() * $detail->getQuantity());
+        }
+
+        $total = $amount + $shipping;
+
+        $html = $this->renderView('invoices/pdf/invoice.html.twig', array(
+            'invoice'  => $invoice,
+            'order'    => $order,
+            'details'  => $details,
+            'amount'   => $amount,
+            'shipping' => $shipping,
+            'total'    => $total,
+            'user'     => $this->getUser(), 
+        ));
+
+        $knpSnappyPdf->setOptions($options);
+
+        return new PdfResponse(
+            $knpSnappyPdf->getOutputFromHtml($html),
+            'file.pdf'
+        );
+
+    }
+   
 }

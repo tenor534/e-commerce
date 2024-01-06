@@ -23,7 +23,7 @@ class Invoices
     #[ORM\Column]
     private ?int $shipping = null;
 
-    #[ORM\Column(length: 150)]
+    #[ORM\Column(length: 150, nullable: true)]
     private ?string $tracking_number = null;
 
     #[ORM\Column(nullable: true)]
