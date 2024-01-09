@@ -7,7 +7,9 @@ use App\Entity\Orders;
 use App\Entity\OrdersDetails;
 use App\Repository\OrdersRepository;
 use App\Repository\ProductsRepository;
+use App\Service\PicturesService;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -15,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/orders', name: 'app_orders_')]
 class OrdersController extends AbstractController
@@ -147,8 +150,9 @@ class OrdersController extends AbstractController
         return $this->redirectToRoute('app_orders_show');
     }
 
+    /*
     #[Route('/generate/invoice/{id}', name: 'generate_invoice', methods: ['GET'])]
-    public function generateInvoicePdf(Invoices $invoice, Pdf $knpSnappyPdf): PdfResponse
+    public function generateInvoicePdf(Invoices $invoice, Pdf $knpSnappyPdf, Request $request): PdfResponse
     {
         //Gégeration d'une facture PDF
         //dd($invoice);
@@ -180,15 +184,65 @@ class OrdersController extends AbstractController
             'shipping' => $shipping,
             'total'    => $total,
             'user'     => $this->getUser(), 
-        ));
-
+            'public_directory'  => $this->getParameter('public_directory')
+            
+        ));      
+        
         $knpSnappyPdf->setOptions($options);
 
         return new PdfResponse(
-            $knpSnappyPdf->getOutputFromHtml($html),
+            $knpSnappyPdf->getOutputFromHtml(
+                $html,
+                array('orientation' => 'Portrait')
+            ),
             'file.pdf'
         );
-
     }
-   
+    */
+
+
+    #[Route('/generate/invoice/{id}', name: 'generate_invoice', methods: ['GET'])]
+    public function generateInvoicePdf(Invoices $invoice, PicturesService $picturesService ): PdfResponse    
+    {
+        //La commande
+        $order      = $invoice->getOrders();
+        $details    = $order->getOrdersDetails();
+
+        $amount     = 0; // Total
+        $shipping   = 499; // val * 100
+
+        foreach($details as $detail){
+            $amount += ($detail->getPrice() * $detail->getQuantity());
+        }
+
+        $total = $amount + $shipping;
+
+        $data = [
+            'logoSrc'  => $picturesService->imageToBase64($this->getParameter('kernel.project_dir') . '/public/assets/img/logo-534-512x512.webp'),
+            'imagePath'=> $this->getParameter('kernel.project_dir') . '/public/assets/uploads/products/images/mini/300x300-',            
+            'cssPath'  => $this->getParameter('kernel.project_dir') . '/public/assets/css',            
+            'invoice'  => $invoice,
+            'order'    => $order,
+            'details'  => $details,
+            'amount'   => $amount,
+            'shipping' => $shipping,
+            'total'    => $total,
+            'user'     => $this->getUser(), 
+            'pictureService' => $picturesService
+        ];      
+        
+        $html   =  $this->renderView('invoices/pdf/invoice.html.twig', $data);
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+         
+        return new PdfResponse(
+            $dompdf->stream('resume', [                
+                'orientation'   => 'Portrait',
+                'page-size'     => 'A4',
+                'encoding'      => 'UTF-8',
+            ]),
+            'invoice.pdf',
+        );
+    }       
 }

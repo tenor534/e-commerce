@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.17",
+        "dompdf/dompdf": "^2.0",
         "fakerphp/faker": "^1.23",
         "knplabs/knp-menu-bundle": "^3.3",
         "knplabs/knp-snappy-bundle": "^1.10",
