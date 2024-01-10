@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Invoices;
 use App\Entity\Orders;
 use App\Entity\OrdersDetails;
+use App\Entity\Refunds;
+use App\Entity\RefundsDetails;
 use App\Repository\OrdersRepository;
 use App\Repository\ProductsRepository;
 use App\Service\PicturesService;
@@ -135,13 +137,45 @@ class OrdersController extends AbstractController
     }
 
     #[Route('/cancel/{id}', name: 'cancel')]
-    public function cancel(Orders $order, EntityManagerInterface $entityManager)
+    public function cancel(Orders $order, EntityManagerInterface $entityManager, ProductsRepository $productsRepository)
     {
         //Etat de la commande : En cours (0) - Expédiées (1) - Retournées (2) - Annulées (3)
         
         $order->setStatus(3);
         $entityManager->persist($order);
+        $entityManager->flush();        
+
+        //
+        //Crée une annulation (1) et un remboursement (2) complet
+        $refund = new Refunds();
+        $refund->setRefundsType(1);
+        $refund->setReference('AV-'.uniqid());
+        $refund->setOrders($order);
+
+        //Les produits de la commande
+        $orderDetails = $order->getOrdersDetails();
+
+        // On parcourt le panier pour créer les détails de commande
+        foreach($orderDetails as $orderDetail){
+            $refundDetails = new RefundsDetails();
+
+            // On va chercher le produit
+            $product = $orderDetail->getProducts();
+            
+            $price = $product->getPrice();
+
+            // On crée le détail de commande
+            $refundDetails->setProducts($product);
+            $refundDetails->setPrice( $orderDetail->getPrice());
+            $refundDetails->setQuantity($orderDetail->getQuantity());
+
+            $refund->addRefundsDetail($refundDetails);
+        }
+
+        // On persiste et on flush
+        $entityManager->persist($refund);
         $entityManager->flush();
+
         
         //Affiche un message flash
         $this->addFlash('success', 'Votre commande a été annulée ! Merci.');
@@ -202,7 +236,7 @@ class OrdersController extends AbstractController
 
 
     #[Route('/generate/invoice/{id}', name: 'generate_invoice', methods: ['GET'])]
-    public function generateInvoicePdf(Invoices $invoice, PicturesService $picturesService ): PdfResponse    
+    public function generateInvoicePdf(Invoices $invoice, PicturesService $picturesService )
     {
         //La commande
         $order      = $invoice->getOrders();
@@ -236,13 +270,56 @@ class OrdersController extends AbstractController
         $dompdf->loadHtml($html);
         $dompdf->render();
          
-        return new PdfResponse(
-            $dompdf->stream('resume', [                
-                'orientation'   => 'Portrait',
-                'page-size'     => 'A4',
-                'encoding'      => 'UTF-8',
-            ]),
-            'invoice.pdf',
-        );
+
+        $fileName = 'invoice' . $order->getReference() . date("Ymd_His") . '.pdf'; 
+        $dompdf->stream($fileName, [                
+            'orientation'   => 'Portrait',
+            'page-size'     => 'A4',
+            'encoding'      => 'UTF-8',
+        ]);       
     }       
+
+    #[Route('/generate/refund/{id}', name: 'generate_refund', methods: ['GET'])]
+    public function generateRefundPdf(Refunds $refund, PicturesService $picturesService )
+    {
+        //La commande
+        //$order      = $refund->getOrders();
+        $details    = $refund->getRefundsDetails();
+
+        $amount     = 0; // Total
+        $shipping   = 499; // val * 100
+
+        foreach($details as $detail){
+            $amount += ($detail->getPrice() * $detail->getQuantity());
+        }
+
+        $total = $amount + $shipping;
+
+        $data = [
+            'logoSrc'  => $picturesService->imageToBase64($this->getParameter('kernel.project_dir') . '/public/assets/img/logo-534-512x512.webp'),
+            'imagePath'=> $this->getParameter('kernel.project_dir') . '/public/assets/uploads/products/images/mini/300x300-',            
+            'cssPath'  => $this->getParameter('kernel.project_dir') . '/public/assets/css',            
+            'refund'   => $refund,
+            'order'    => $refund->getOrders(),
+            'details'  => $details,
+            'amount'   => $amount,
+            'shipping' => $shipping,
+            'total'    => $total,
+            'user'     => $this->getUser(), 
+            'pictureService' => $picturesService
+        ];      
+        
+        $html   =  $this->renderView('invoices/pdf/refund.html.twig', $data);
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        
+        $fileName = 'refund' . $refund->getReference() . date("Ymd_His") . '.pdf';
+        $dompdf->stream($fileName, [                
+            'orientation'   => 'Portrait',
+            'page-size'     => 'A4',
+            'encoding'      => 'UTF-8',
+        ]);
+    }   
 }
+

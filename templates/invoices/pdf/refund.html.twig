@@ -79,13 +79,11 @@
                         <div class="col-sm-6 mb-3 mb-sm-0 float-start">
                             <div style="margin: 0px; padding: 0px;">                                
                                 <ul class="b-0">
-                                <li class="list-group-item"><b>Facture : {{ invoice.reference }} du {{ invoice.createdAt|date("d/m/Y") }}</b></li>
-                                <li class="list-group-item"><b>Commande : {{ order.reference }} du {{ order.createdAt|date("d/m/Y") }}</b></li>
-                                <li class="list-group-item">N° Suivi Transporteur : {{ invoice.trackingNumber }}</li>
-                                <li class="list-group-item">Statut : 
-                                    <small class="d-inline-flex px-2 fw-semibold text-{{ color }}-emphasis bg-{{ color }}-subtle border border-{{ color }}-subtle rounded-2">
-                                        {{ statusStr }}
-                                    </small>
+                                    <li class="list-group-item"><b>Commande : N° {{ order.reference }} du {{ order.createdAt|date("d/m/Y") }} </b></li>
+                                    <li class="list-group-item"></li>
+                                    <li class="list-group-item"><b>Remboursement : N° {{ refund.reference }}</b></li>
+                                <li class="list-group-item">Date : {{ refund.createdAt|date("d/m/Y") }}
+                                    
                                 </li>
                                 </ul>
                             </div>
@@ -108,9 +106,9 @@
                     <th class="th">Total</th>            
                 </tr>
             </thead>
+            {% for detail in details %}             °  °°
             <tbody>
                 
-                {% for detail in details %}             
                     <tr>
                         <td class="td">{{ detail.getProducts().name }}</td>
                         <td class="td" style="text-align: center;">                                                                      

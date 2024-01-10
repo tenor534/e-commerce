@@ -28,7 +28,7 @@ class Refunds
     #[ORM\JoinColumn(nullable: false)]
     private ?Orders $orders = null;
 
-    #[ORM\OneToMany(mappedBy: 'refunds', targetEntity: RefundsDetails::class)]
+    #[ORM\OneToMany(mappedBy: 'refunds', targetEntity: RefundsDetails::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $refundsDetails;
 
     public function __construct()

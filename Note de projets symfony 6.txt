@@ -1,0 +1,29 @@
+Note de projets symfony 6
+------------------------
+
+1 - Installation de Symfony 6
+2 - Présentation et configuration du projet (Symfony 6)
+3 - Création de la base de données (Symfony 6)
+4 - Mise en place des templates et des assets CSS et JS (Symfony 6)
+5 - Inscription et authentification des utilisateurs (Symfony 6)
+6 - Optimisation des entités et DataFixtures (Symfony 6)
+7 - Création des contrôleurs (Symfony 6)
+8 - Intégrer les données dans les vues (Symfony 6)
+
+9 - Vérification d'adresse email sans bundle (Symfony 6)
+10 - Récupération de mot de passe sans bundle (Symfony 6)
+11 - Personnaliser les pages d'erreurs (Symfony 6)
+12 - Mettre à jour Symfony 6.0 en version 6.1 (Symfony 6)
+13 - Accès aux données - création de la page détails des produits (Symfony 6)
+14 - Mise en place de la pagination sans bundle (Symfony 6)
+15 - Mise en place des permissions utilisateurs avec les voters (Symfony 6)
+16 - Création du formulaire d'ajout de produits (Symfony 6)
+17 - Upload et gestion d'images multiples (Symfony 6)
+18 - Optimisation et validation des formulaires (Symfony 6)
+19 - Créer une interface d'administration sans bundle (Symfony 6)
+20 - Gestion du panier d'achats sans bundle (Symfony 6)
+21 - Conversion du panier en commande (Symfony 6
+
+24 - Les formulaires dynamiques et le CollectionType dans un projet Symfony
+29 - La gestion du cache avec Symfony
+30 - La gestion du cache avec Symfony (Partie 2)

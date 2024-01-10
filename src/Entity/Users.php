@@ -7,6 +7,7 @@ use App\Repository\UsersRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -55,6 +56,15 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Orders::class, orphanRemoval: true)]
     private Collection $orders;
+
+    #[ORM\Column(length: 255)]
+    private ?string $googleId = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $avatar = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $hostedDomain = null;
 
     public function __construct()
     {
@@ -238,6 +248,42 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;        
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(string $googleId): static
+    {
+        $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getHostedDomain(): ?string
+    {
+        return $this->hostedDomain;
+    }
+
+    public function setHostedDomain(string $hostedDomain): static
+    {
+        $this->hostedDomain = $hostedDomain;
+
+        return $this;
     }   
    
 
