@@ -38,29 +38,6 @@ class GoogleController extends AbstractController
      * because this is the "redirect_route" you configured
      * in config/packages/knpu_oauth2_client.yaml
      */
-    #[Route('/connect/google/check_', name: 'connect_google_check_')]
-    public function connectCheckAction_(Request $request, ClientRegistry $clientRegistry)
-    {
-        // ** if you want to *authenticate* the user, then
-        // leave this method blank and create a Guard authenticator
-        /*var_dump($request);
-        if (!$this->getUser()) {
-            return new JsonResponse(['status' => false, 'message' => 'User not found!']);
-        } else {
-            return $this->redirectToRoute('app_main');
-        }
-        */
-
-        $client = $clientRegistry->getClient('google');
-        
-        try {
-            $user = $client->fetchUser();
-            exit;
-        } catch (IdentityProviderException $e) {
-            var_dump($e->getMessage()); die;
-        }
-    }
-
     #[Route('/connect/google/check', name: 'connect_google_check')]
     public function connectCheckAction(
         Request $request,
@@ -99,7 +76,6 @@ class GoogleController extends AbstractController
                     $googleUser->getId()
                 )
             );                       
-
             
             $user->setRoles(['ROLE_USER']);
             $user->setEmail($googleUser->getEmail());
