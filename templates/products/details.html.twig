@@ -28,63 +28,178 @@
             <div class="bd-example m-0 border-0">           
 
 
-            <section class="row">
-                <div class="col-12">
-                    <h1>{{product.name}}</h1>                    
-                </div>
-                <div class="col-6">
-                    <div id="carouselExampleIndicators" class="carousel slide">
-                        <div class="carousel-indicators">
-                            {% for iteration in 1..product.images|length %}
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ iteration - 1 }}"                                                                 
-                                {{ (loop.first)? 'class="active" aria-current="true"' : ''}}
-                                aria-label="Slide {{ iteration }}">
-                            </button>
-                            {% endfor %}    
-                        </div>
-                        <div class="carousel-inner">
-                
-                            {% for image in product.images %}
-                
-                            <div class="carousel-item {{ (loop.first)? 'active' : ''}}">
-                                <img src="{{ asset('assets/uploads/products/images/mini/300x300-') ~ image.name }}" class="d-block w-100" width="150" height="auto" alt="{{ image.name }}">
+            <!-- Product section-->
+            <section class="py-5">
+                <div class="container px-4 px-lg-5 my-5">
+                    <div class="row gx-4 gx-lg-5 align-items-center">
+                        <div class="col-md-6">
+                            
+                            <div id="carouselExampleIndicators" class="carousel slide">
+                                <div class="carousel-indicators">
+                                    {% for iteration in 1..product.images|length %}
+                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ iteration - 1 }}"                                                                 
+                                        {{ (loop.first)? 'class="active" aria-current="true"' : ''}}
+                                        aria-label="Slide {{ iteration }}">
+                                    </button>
+                                    {% endfor %}    
+                                </div>
+                                <div class="carousel-inner">
+                        
+                                    {% for image in product.images %}
+                        
+                                    <div class="carousel-item {{ (loop.first)? 'active' : ''}}">
+                                        <img src="{{ asset('assets/uploads/products/images/mini/300x300-') ~ image.name }}" class="d-block w-100" width="150" height="auto" alt="{{ image.name }}">
+                                    </div>
+                        
+                                    {% endfor %}
+                        
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
-                
-                            {% endfor %}
-                
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+
+                        <div class="col-md-6">
+                            <div class="small mb-1">
+                                <a href="{{path('app_products_list', {slug: product.categories.slug})}}" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                                    {{ product.categories.name }}
+                                </a>
+                            </div>
+                            <h1 class="display-5 fw-bolder">{{ product.name}}</h1>
+                            <div class="fs-5 mb-5">
+                                <span class="text-decoration-line-through">{{ (product.price / 100) |format_currency('EUR', locale='de') }}</span>
+                                <span>{{ (product.price / 100) |format_currency('EUR', locale='de') }}</span>
+                            </div>
+                            <p class="lead">{{ product.description }}</p>
+                            <div class="d-flex">
+                                <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                                {% if product.stock > 0 %}
+                                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                        <i class="bi-cart-fill me-1"></i>
+                                        <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-outline-dark">Add to card</a>
+                                    </button>
+                                {% else %}
+                                    <p>Temporairemet en rupture de stock</p>                                    
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <p>{{ product.description }}</p>
-                    <p>Category :     
-                        <a href="{{path('app_products_list', {slug: product.categories.slug})}}" class="btn btn-primary">
-                            {{ product.categories.name }}
-                        </a>
-                    </p>
-                    <p>
-                        Price : {{ (product.price / 100) |format_currency('EUR', locale='de') }} 
-                    </p>
-                    {% if product.stock > 0 %}
-                        <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-success">Add to card</a>
-                    {% else %}
-                        <p>Temporairemet en rupture de stock</p>
-                        
-                    {% endif %}
-
+            </section>         
+            <!-- Related items section-->
+            <section class="py-5 bg-light">
+                <div class="container px-4 px-lg-5 mt-5">
+                    <h2 class="fw-bolder mb-4">Related products</h2>
+                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">Fancy Product</h5>
+                                        <!-- Product price-->
+                                        $40.00 - $80.00
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Sale badge-->
+                                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                                <!-- Product image-->
+                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">Special Item</h5>
+                                        <!-- Product reviews-->
+                                        <div class="d-flex justify-content-center small text-warning mb-2">
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                        </div>
+                                        <!-- Product price-->
+                                        <span class="text-muted text-decoration-line-through">$20.00</span>
+                                        $18.00
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Sale badge-->
+                                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                                <!-- Product image-->
+                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">Sale Item</h5>
+                                        <!-- Product price-->
+                                        <span class="text-muted text-decoration-line-through">$50.00</span>
+                                        $25.00
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">Popular Item</h5>
+                                        <!-- Product reviews-->
+                                        <div class="d-flex justify-content-center small text-warning mb-2">
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                            <div class="bi-star-fill"></div>
+                                        </div>
+                                        <!-- Product price-->
+                                        $40.00
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
-            
+            </section>   
         </div>
     </div>
 </section>

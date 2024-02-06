@@ -49,10 +49,10 @@
         <div class="bd-exemple-snippet bd-code-snippet">
             <div class="bd-example m-0 border-0">           
                             
-                <div class="row">                                               
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">                                              
                     {% if products.datas is defined  %}
                         {% for product in products.datas %}            
-                        <div class="col-4 mb-3 mt-3">
+                        <div class="col mb-5">
                             <div class="card h-100">
                                 
                                 {% if product.images[0] != null %}                                                            
@@ -63,11 +63,17 @@
                                 >
                                 {% endif %}
 
-                                <div class="card-body">
-                                    <h5 class="card-title">{{product.name}}</h5>
-                                    <p class="card-text">{{product.description}}</p>
-                                    <a href="{{path('app_products_details', {id: product.id})}}" class="btn btn-primary">Show details</a>
-
+                                <div class="card-body pb-2">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">{{product.name}}</h5>
+                                        <!-- Product description-->
+                                        {{product.description}}
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-1 border-top-0 bg-transparent text-center">                                                   
+                                    <a href="{{path('app_products_details', {id: product.id})}}" class="btn btn-outline-dark">Show details</a>
                                 </div>
                             </div>
                         </div>
