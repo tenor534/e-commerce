@@ -80,7 +80,14 @@ class OrdersController extends AbstractController
         $session->remove('cart');
 
         $this->addFlash('message', 'Commande créée avec succès');
-        return $this->redirectToRoute('app_main');
+
+        
+        return $this->redirectToRoute(
+            'app_orders_show_details', 
+            array(
+                'id' => $order->getId(),
+            )
+        );
     }
 
 

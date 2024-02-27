@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartController extends AbstractController
 {
 
+    //private $nbItems    = 0;
+    //private $total      = 0;
+
     #[Route('/', name: 'index')]
     public function index(SessionInterface $session, ProductsRepository $productsRepository): Response
     {
@@ -34,6 +37,11 @@ class CartController extends AbstractController
             
             $total += $product->getPrice() * $quantite;            
         }      
+        
+        //On a vidé le contenu du panier
+        if($total == 0){
+            return $this->redirectToRoute('app_main');
+        }
         
         return $this->render('cart/index.html.twig', [
             'controller_name'   => 'CartController',
@@ -61,9 +69,8 @@ class CartController extends AbstractController
         }
 
         $session->set('cart', $cart);      
-        
+                
         //Redirection vers la page index
-
         return $this->redirectToRoute('app_cart_index');
     }
 
