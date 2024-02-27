@@ -117,6 +117,6 @@ class CartController extends AbstractController
     {
         $session->remove('cart');
 
-        return $this->redirectToRoute('app_cart_index');
+        return $this->redirectToRoute('app_main');
     }
 }

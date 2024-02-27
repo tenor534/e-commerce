@@ -68,7 +68,18 @@
                 <button class="btn btn-outline-dark" type="submit">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">
+                        {% set nbItem = 0 %}
+                        {% set cart = app.session.get('cart') %}
+                        
+                        {% if cart is not null %}
+                            {% for id,value in cart %}
+                                {% set nbItem = nbItem + value %}                                
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {{ nbItem }}
+                    </span>
                 </button>
             </form>
         </div>
