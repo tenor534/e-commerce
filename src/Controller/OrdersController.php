@@ -80,7 +80,6 @@ class OrdersController extends AbstractController
         $session->remove('cart');
 
         $this->addFlash('message', 'Commande créée avec succès');
-
         
         return $this->redirectToRoute(
             'app_orders_show_details', 
@@ -150,7 +149,7 @@ class OrdersController extends AbstractController
         
         $order->setStatus(3);
         $entityManager->persist($order);
-        $entityManager->flush();        
+        $entityManager->flush();               
 
         //
         //Crée une annulation (1) et un remboursement (2) complet
